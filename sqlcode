@@ -23,7 +23,7 @@ CREATE TABLE Shipment
 ID int auto_increment,
 ItemID int NOT NULL,
 Quantity int NOT NULL,
-ShipmentDate date NOT NULL,     /* 3. iV) This line needs to be edited to be unique and only allow once per day*/
+ShipmentDate date NOT NULL UNIQUE,
 primary key(id),
 FOREIGN KEY (ID) REFERENCES Item(ID)
 );
