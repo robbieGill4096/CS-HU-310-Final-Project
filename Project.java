@@ -15,9 +15,10 @@ public class Project {
 			// Do something with the Connection
 			System.out.println("Database [test db] connection succeeded!");
 			System.out.println();
-			
-			con.setAutoCommit(false);//transaction block starts
-		
+			Statement stmt = null;
+			ResultSet resultSet;
+			conn.setAutoCommit(false);//transaction block starts
+			stmt = conn.createStatement();
 			//Parse
 			if (args[0].equals("/?") {
 				if(args.length != 1) {
@@ -56,7 +57,11 @@ public class Project {
 					System.out.println("java Project GetItems <itemCode>");
 					System.exit(1);
 				} else {
-					//Insert SQL code here
+					if(args[1].equals("%")) {
+						
+					} else {
+						
+					}
 				}
 			}
 			else if (args[0].equals("GetShipments") {
@@ -72,7 +77,12 @@ public class Project {
 					System.out.println("java Project GetPurchases <itemCode>");
 					System.exit(1);
 				} else {
-					//Insert SQL code here
+					if (args[1].equals("%")) {
+						resultSet = stmt.executeQuery("SELECT * FROM Purchase ORDER BY ItemID ASC;");
+					} else {
+						resultSet = stmt.executeQuery("SELECT * FROM Purchase where ItemID = "+args[1]+";");
+					}
+					System.out.println(resultSet);
 				}
 			}
 			else if (args[0].equals("ItemsAvailable") {
@@ -80,7 +90,48 @@ public class Project {
 					System.out.println("java Project ItemsAvailable <itemCode>");
 					System.exit(1);
 				} else {
-					//Insert SQL code here
+					if (args[1].equals("%")) {
+						stmt.executeQuery("Select i.ItemCode, i.ItemDescription, SUM(s.Quantity - p.Quantity) as AvailableItems"
+								+ " From Item i, p Purchase, s Shipment ORDER BY i.ItemCode;");
+					} else {
+						//Still working on this
+						stmt.executeQuery("Select i.ItemCode, i.ItemDescription, SUM(s.Quantity - p.Quantity) as AvailableItems"
+							+ " From Item i, p Purchase, s Shipment where ItemCode = "+args[1]+";");
+					{
+				}
+			}
+			else if (args[0].equals("UpdateItem") {
+				if(args.length != 3) {
+					System.out.println("java Project UpdateItem <itemCode> <price>");
+					System.exit(1);
+				} else {
+					stmt.executeUpdate( "Update Item set Price = "+args[2]+" where ItemCode = "+args[1]+";");
+				}
+			}
+			else if (args[0].equals("DeleteItem") {
+				if(args.length != 2) {
+					System.out.println("java Project DeleteItem <itemCode>");
+					System.exit(1);
+				} else {
+					stmt.executeUpdate("Delete From Item where ItemCode = "+args[1]+";");
+				}
+			}
+			else if (args[0].equals("DeleteShipment") {
+				if(args.length != 2) {
+					System.out.println("java Project DeleteShipment <itemCode>");
+					System.exit(1);
+				} else {
+					stmt.executeUpdate("set @itemID = (Select ID from Item where itemCode = "+args[1]+"); "
+							+ "Delete From Shipment where ItemID = @itemID limit 1;");
+				}
+			}
+			else if (args[0].equals("DeletePurchase") {
+				if(args.length != 2) {
+					System.out.println("java Project DeletePurchase <itemCode>");
+					System.exit(1);
+				} else {
+					stmt.executeUpdate("set @itemID = (Select ID from Item where itemCode = "+args[1]+");"
+							+ "Delete From Purchase where ItemID = @itemID limit 1;");
 				}
 			} else {
 				System.out.println("No arguments used, input: java Project /? for all usage commands");
@@ -96,8 +147,8 @@ public class Project {
 //		
 //		if(stmt2!=null)
 //			stmt2.close();
-//		
-		con.setAutoCommit(true); // restore dafault mode
-		con.close();
+		
+		conn.setAutoCommit(true); // restore dafault mode
+		conn.close();
 	}
 }
