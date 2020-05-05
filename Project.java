@@ -8,7 +8,7 @@ public class Project {
 
 	public static void main(String[] args) {
 		Connection conn = null;
-		Statement stm = null;
+		Statement stmt = null;
 		try {
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:52116/test?verifyServerCertificate=false&useSSL=true", "msandbox",
