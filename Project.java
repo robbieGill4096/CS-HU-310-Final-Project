@@ -20,7 +20,7 @@ public class Project {
 			conn.setAutoCommit(false);//transaction block starts
 			stmt = conn.createStatement();
 			//Parse
-			if (args[0].equals("/?") {
+			if (args[0].equals("/?")) {
 				if(args.length != 1) {
 					System.out.println("invalid usage, Usage:  java Project /?");
 					System.exit(1);
@@ -28,7 +28,7 @@ public class Project {
 					//Insert SQL code here
 				}
 			}
-			else if (args[0].equals("CreateItem") {
+			else if (args[0].equals("CreateItem")) {
 				if(args.length != 4) {
 					System.out.println("invalid usage, Usage: java Project CreateItem <itemCode> <itemDescription> <price>");
 					System.exit(1);
@@ -36,7 +36,7 @@ public class Project {
 					//Insert SQL code here
 				}
 			}
-			else if (args[0].equals("CreatePurchase") {
+			else if (args[0].equals("CreatePurchase")) {
 				if(args.length != 3) {
 					System.out.println("invalid usage, Usage: java Project CreatePurchase <itemCode> <PurchaseQuantity>");
 					System.exit(1);
@@ -44,7 +44,7 @@ public class Project {
 					//Insert SQL code here
 				}
 			}
-			else if (args[0].equals("CreateShipment") {
+			else if (args[0].equals("CreateShipment")) {
 				if(args.length != 4) {
 					System.out.println("java Project CreateShipment <itemCode> <ShipmentQuantity> <shipmentDate>");
 					System.exit(1);
@@ -52,7 +52,7 @@ public class Project {
 					//Insert SQL code here
 				}
 			}
-			else if (args[0].equals("GetItems") {
+			else if (args[0].equals("GetItems")) {
 				if(args.length != 2) {
 					System.out.println("java Project GetItems <itemCode>");
 					System.exit(1);
@@ -64,7 +64,7 @@ public class Project {
 					}
 				}
 			}
-			else if (args[0].equals("GetShipments") {
+			else if (args[0].equals("GetShipments")) {
 				if(args.length != 2) {
 					System.out.println("java Project GetShipments <itemCode>");
 					System.exit(1);
@@ -72,7 +72,7 @@ public class Project {
 					//Insert SQL code here
 				}
 			}
-			else if (args[0].equals("GetPurchases") {
+			else if (args[0].equals("GetPurchases")) {
 				if(args.length != 2) {
 					System.out.println("java Project GetPurchases <itemCode>");
 					System.exit(1);
@@ -85,7 +85,7 @@ public class Project {
 					System.out.println(resultSet);
 				}
 			}
-			else if (args[0].equals("ItemsAvailable") {
+			else if (args[0].equals("ItemsAvailable")) {
 				if(args.length != 2) {
 					System.out.println("java Project ItemsAvailable <itemCode>");
 					System.exit(1);
@@ -100,7 +100,7 @@ public class Project {
 					{
 				}
 			}
-			else if (args[0].equals("UpdateItem") {
+			else if (args[0].equals("UpdateItem")) {
 				if(args.length != 3) {
 					System.out.println("java Project UpdateItem <itemCode> <price>");
 					System.exit(1);
@@ -108,7 +108,7 @@ public class Project {
 					stmt.executeUpdate( "Update Item set Price = "+args[2]+" where ItemCode = "+args[1]+";");
 				}
 			}
-			else if (args[0].equals("DeleteItem") {
+			else if (args[0].equals("DeleteItem")) {
 				if(args.length != 2) {
 					System.out.println("java Project DeleteItem <itemCode>");
 					System.exit(1);
@@ -116,7 +116,7 @@ public class Project {
 					stmt.executeUpdate("Delete From Item where ItemCode = "+args[1]+";");
 				}
 			}
-			else if (args[0].equals("DeleteShipment") {
+			else if (args[0].equals("DeleteShipment")) {
 				if(args.length != 2) {
 					System.out.println("java Project DeleteShipment <itemCode>");
 					System.exit(1);
@@ -125,7 +125,7 @@ public class Project {
 							+ "Delete From Shipment where ItemID = @itemID limit 1;");
 				}
 			}
-			else if (args[0].equals("DeletePurchase") {
+			else if (args[0].equals("DeletePurchase")) {
 				if(args.length != 2) {
 					System.out.println("java Project DeletePurchase <itemCode>");
 					System.exit(1);
@@ -147,6 +147,7 @@ public class Project {
 //		
 //		if(stmt2!=null)
 //			stmt2.close();
+		stmt.close();
 		
 		conn.setAutoCommit(true); // restore dafault mode
 		conn.close();
