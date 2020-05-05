@@ -97,7 +97,7 @@ public class Project {
 						//Still working on this
 						stmt.executeQuery("Select i.ItemCode, i.ItemDescription, SUM(s.Quantity - p.Quantity) as AvailableItems"
 							+ " From Item i, p Purchase, s Shipment where ItemCode = "+args[1]+";");
-					{
+					}
 				}
 			}
 			else if (args[0].equals("UpdateItem")) {
