@@ -6,7 +6,7 @@ import java.util.*;
  */
 public class Project {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
 		Connection conn = null;
 		Statement stmt = null;
 		try {
