@@ -10,6 +10,7 @@ public class Project {
 		Connection conn = null;
 		Statement stmt = null;
 		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:52116/test?verifyServerCertificate=false&useSSL=true", "msandbox",
 					"Hello667");
