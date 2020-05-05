@@ -7,14 +7,15 @@ import java.util.*;
 public class Project {
 
 	public static void main(String[] args) {
+		Connection conn = null;
+		Statement stm = null;
 		try {
-			Connection conn = DriverManager.getConnection(
+			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:52116/test?verifyServerCertificate=false&useSSL=true", "msandbox",
 					"Hello667");
 			// Do something with the Connection
 			System.out.println("Database [test db] connection succeeded!");
 			System.out.println();
-			Statement stmt = null;
 			ResultSet resultSet;
 			conn.setAutoCommit(false);//transaction block starts
 			stmt = conn.createStatement();
