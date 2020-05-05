@@ -147,7 +147,9 @@ public class Project {
 //		
 //		if(stmt2!=null)
 //			stmt2.close();
-		stmt.close();
+		if (stmt != null) {
+			stmt.close();
+		}
 		
 		conn.setAutoCommit(true); // restore dafault mode
 		conn.close();
