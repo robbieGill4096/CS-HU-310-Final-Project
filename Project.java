@@ -5,11 +5,10 @@ import java.util.*;
 ((insert description here))
  */
 public class Project {
-	private Connection conn = null;
-	
+
 	public static void main(String[] args) {
 		try {
-			conn = DriverManager.getConnection(
+			Connection conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:52116/test?verifyServerCertificate=false&useSSL=true", "msandbox",
 					"Hello667");
 			// Do something with the Connection
