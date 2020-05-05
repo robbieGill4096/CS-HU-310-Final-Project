@@ -142,17 +142,12 @@ public class Project {
 			System.err.println("SQLException: " + ex.getMessage());
 			System.err.println("SQLState: " + ex.getSQLState());
 			System.err.println("VendorError: " + ex.getErrorCode());
-		}
-//		if(stmt!=null)
-//			stmt.close();
-//		
-//		if(stmt2!=null)
-//			stmt2.close();
+		} finally {
 		if (stmt != null) {
 			stmt.close();
 		}
-		
 		conn.setAutoCommit(true); // restore dafault mode
 		conn.close();
+		}
 	}
 }
