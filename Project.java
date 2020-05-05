@@ -11,7 +11,7 @@ public class Project {
 		Statement stmt = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:52116/sqlcode?verifyServerCertificate=false&useSSL=true&serverTimezone=UTC", "msandbox",
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:52116/CS310?verifyServerCertificate=false&useSSL=true&serverTimezone=UTC", "msandbox",
 					"Hello667");
 			// Do something with the Connection
 			System.out.println("Database [test db] connection succeeded!");
