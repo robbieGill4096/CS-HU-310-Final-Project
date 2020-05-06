@@ -94,15 +94,13 @@ Delimiter $$
 CREATE PROCEDURE GetItems(item_Code varchar(10))
 BEGIN
   IF item_code = '%'
-  BEGIN
   select * from Purchases;
   END
   ELSE
-  BEGIN
   select * 
   from Item
   Where Item.ItemCode like item_Code;
-  END
+  END IF;
 END;
 $$
 
