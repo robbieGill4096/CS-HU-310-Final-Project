@@ -143,7 +143,7 @@ BEGIN
   END IF;
 END;
 $$
-
+ 
 Delimiter $$
 CREATE PROCEDURE UpdateItem (item_Code varchar(10), item_price int)
 BEGIN
