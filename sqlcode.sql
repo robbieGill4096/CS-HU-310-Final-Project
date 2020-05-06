@@ -95,9 +95,8 @@ CREATE PROCEDURE GetItems(item_Code varchar(10))
 BEGIN
   IF item_code = '%' THEN
   select * from Purchases;
-  END
   ELSE
-  select * from Item Where Item.ItemCode = item_Code;
+  select * from Item Where ItemCode = item_Code;
   END IF;
 END;
 $$
