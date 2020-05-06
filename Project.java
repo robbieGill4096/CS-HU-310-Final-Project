@@ -89,6 +89,7 @@ public class Project {
 			}
 		}
 	}
+	
 	private static void GetShipments(String itemCode) {
 		Statement prepStatement = null;
 		ResultSet resSet = null;
@@ -128,7 +129,43 @@ public class Project {
 		}
 	}
 	
-	
+	private static void GetItems(String itemCode) {
+		Statement prepStatement = null;
+		ResultSet resSet = null;
+
+		try {
+			prepStatement = conn.createStatement();
+			resSet = prepStatement.executeQuery("Call GetItems('" + itemCode + "');");
+			
+			System.out.println("ID:ItemCode:ItemDescription:Price\n");
+			
+			resSet.beforeFirst();
+			
+			while (resSet.next()) {
+				System.out.println(resSet.getInt(1) + ":" + resSet.getString(2) + ":" + resSet.getString(3) + ":" + resSet.getDouble(4));
+			}
+		} catch (SQLException ex) {
+			// handle any errors
+			System.err.println("SQLException: " + ex.getMessage());
+			System.err.println("SQLState: " + ex.getSQLState());
+			System.err.println("VendorError: " + ex.getErrorCode());
+		} finally {
+			if (resSet != null) {
+				try {
+					resSet.close();
+				} catch (SQLException sqlEx) {
+				} // ignore
+				resSet = null;
+			}
+			if (prepStatement != null) {
+				try {
+					prepStatement.close();
+				} catch (SQLException sqlEx) {
+				} // ignore
+				prepStatement = null;
+			}
+		}
+	}
 	
 	
 	
@@ -204,11 +241,10 @@ public class Project {
 					System.out.println("java Project GetItems <itemCode>");
 					System.exit(1);
 				} else {
-					if(args[1].equals("%")) {
+						String itemCode = args[1];
+						GetItems(itemCode);
 						
-					} else {
-						
-					}
+					
 				}
 			}
 			else if (args[0].equals("GetShipments")) {
