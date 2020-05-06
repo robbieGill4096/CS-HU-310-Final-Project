@@ -30,7 +30,7 @@ Alter table Shipment
 ADD FOREIGN KEY (ItemID) REFERENCES Item(ID);
 
 Delimiter $$           
-CREATE PROCEDURE PROCEDURE CreateItem(itemCode varchar(10), itemDesc varchar(50), itempri decimal)
+CREATE PROCEDURE PROCEDURE CreateItem(itemCode varchar(10), itemDesc varchar(50), itempri decimal(4,2))
 BEGIN
 	Insert Into Item (ItemCode, ItemDescription, Price)
 	Values (itemCode, itemDesc, itempri);
@@ -97,7 +97,7 @@ BEGIN
   select * from Purchases;
   END
   ELSE
-  select * from Item Where Item.ItemCode = item_Code;
+  select * from Item Where ItemCode = item_Code;
   END IF;
 END;
 $$
