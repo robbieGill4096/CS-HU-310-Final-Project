@@ -42,9 +42,9 @@ public class Project {
 					System.exit(1);
 				} else {
 					if (args.length == 4) {
-						stmt.executeUpdate("Insert Into Item (ItemCode, ItemDescription, Price) Values ("+args[1]+", "+args[2]+", "+Double.parseDouble(args[3])+");");
+						stmt.executeUpdate("Insert Into Item (ItemCode, ItemDescription, Price) Values ("+"'"+args[1]+"'"+", "+"'"+args[2]+"'"+", "+args[3]+");");
 					} else {
-						stmt.executeUpdate("Insert Into Item (ItemCode, ItemDescription) Values ("+args[1]+", "+args[2]+");");
+						stmt.executeUpdate("Insert Into Item (ItemCode, ItemDescription) Values ("+"'"+args[1]+"'"+", "+"'"+args[2]+"'"+");");
 					}
 				}
 			}
