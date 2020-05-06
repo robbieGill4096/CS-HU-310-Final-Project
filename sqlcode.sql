@@ -1,6 +1,3 @@
-Create Database FinalProject;
-USE FinalProject;
-
 Create Table Item
 (ID int auto_increment,
 ItemCode varchar(10) NOT NULL UNIQUE,
