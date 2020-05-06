@@ -128,16 +128,16 @@ Delimiter $$
 CREATE PROCEDURE ItemsAvailable(item_Code varchar(10))
 BEGIN
   IF item_Code like '%\%'THEN
-  SELECT i.ItemCode, i.ItemDescription, IFNULL((sum(ItemShip.Quantity) - sum(ItemPurch.Quantity)),0) as totalQuantity
+  SELECT i.ItemCode, i.ItemDescription, IFNULL(sum(ItemShip.Quantity),0) - IFNULL(sum(ItemPurch.Quantity),0) as totalQuantity
   FROM Item i
   LEFT JOIN Purchase ItemPurch ON i.ID = ItemPurch.ItemID  
   LEFT JOIN Shipment as ItemShip ON i.ID = ItemShip.ItemID
   group by i.ItemCode;
   ELSE
-  SELECT i.ItemCode, i.ItemDescription, IFNULL((sum(ItemShip.Quantity) - sum(ItemPurch.Quantity)), 0) as totalQuantity
+  SELECT i.ItemCode, i.ItemDescription, IFNULL(sum(ItemShip.Quantity),0) - IFNULL(sum(ItemPurch.Quantity),0) as totalQuantity
   FROM Item i
-  LEFT JOIN Purchase ItemPurch ON i.ID = ItemPurch.ItemID  
-  LEFT JOIN Shipment as ItemShip ON i.ID = ItemShip.ItemID 
+  LEFT JOIN Purchase ItemPurch ON i.ID = ItemPurch.ItemID
+  LEFT JOIN Shipment as ItemShip ON i.ID = ItemShip.ItemID
   where i.ItemCode like item_Code
   group by i.ItemCode;
   END IF;
@@ -152,3 +152,4 @@ SET Item.Price = item_price
 WHERE Item.ItemCode = item_Code;
 END;
 $$
+
