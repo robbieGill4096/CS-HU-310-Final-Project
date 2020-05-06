@@ -1,3 +1,7 @@
+Create Database FinalProject;
+USE FinalProject;
+
+
 CREATE TABLE Item
 (
 ID int auto_increment,
