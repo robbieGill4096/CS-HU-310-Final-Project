@@ -93,7 +93,7 @@ $$
 Delimiter $$
 CREATE PROCEDURE GetItems(item_Code varchar(10))
 BEGIN
-  IF item_code = '%'
+  IF item_code = '%' THEN
   select * from Purchases;
   END
   ELSE
@@ -107,7 +107,7 @@ $$
 Delimiter $$
 CREATE PROCEDURE GetPurchases(item_Code varchar(10))
 BEGIN
-  IF item_code = '%'
+  IF item_code = '%' THEN
   select * from Purchases;
   ELSE
   select * 
@@ -120,7 +120,7 @@ $$
 Delimiter $$
 CREATE PROCEDURE GetShipments (item_Code varchar(10))
 BEGIN
-  IF item_code = '%'
+  IF item_code = '%' THEN
   select * from Shipment;
   ELSE
   select * 
@@ -133,7 +133,7 @@ $$
 Delimiter $$
 CREATE PROCEDURE ItemsAvailable(item_Code varchar(10))
 BEGIN
-  IF item_Code = '%'
+  IF item_Code = '%'THEN
   SELECT i.ItemCode, i.ItemDescription, (sum(ItemShip.Quantity) - sum(ItemPurch.Quantity)) as totalQuantity
   FROM Item i
   LEFT JOIN Purchase ItemPurch ON i.ID = ItemPurch.ItemID  
