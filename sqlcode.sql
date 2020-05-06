@@ -128,13 +128,13 @@ Delimiter $$
 CREATE PROCEDURE ItemsAvailable(item_Code varchar(10))
 BEGIN
   IF item_Code = '%\%'THEN
-  SELECT i.ItemCode, i.ItemDescription, (sum(ItemShip.Quantity) - sum(ItemPurch.Quantity)) as totalQuantity
+  SELECT i.ItemCode, i.ItemDescription, IF NULL((sum(ItemShip.Quantity) - sum(ItemPurch.Quantity)),0) as totalQuantity
   FROM Item i
   LEFT JOIN Purchase ItemPurch ON i.ID = ItemPurch.ItemID  
   LEFT JOIN Shipment as ItemShip ON i.ID = ItemShip.ItemID
   group by i.ItemCode;
   ELSE
-  SELECT i.ItemCode, i.ItemDescription, (sum(ItemShip.Quantity) - sum(ItemPurch.Quantity)) as totalQuantity
+  SELECT i.ItemCode, i.ItemDescription, IF NULL((sum(ItemShip.Quantity) - sum(ItemPurch.Quantity)), 0) as totalQuantity
   FROM Item i
   LEFT JOIN Purchase ItemPurch ON i.ID = ItemPurch.ItemID  
   LEFT JOIN Shipment as ItemShip ON i.ID = ItemShip.ItemID 
