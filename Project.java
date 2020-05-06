@@ -2,7 +2,7 @@ import java.sql.*;
 /*
 ((insert description here))
  */
-public class Project2 {
+public class Project {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
 		Connection conn = null;
