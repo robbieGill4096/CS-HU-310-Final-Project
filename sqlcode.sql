@@ -90,8 +90,8 @@ $$
 Delimiter $$
 CREATE PROCEDURE GetItems(item_Code varchar(10))
 BEGIN
-  IF item_code like '%\%' THEN
-  select * from Purchase;
+  IF item_Code like '%\%' THEN
+  select * from Item;
   ELSE
   select * from Item Where ItemCode = item_Code;
   END IF;
@@ -101,7 +101,7 @@ $$
 Delimiter $$
 CREATE PROCEDURE GetPurchases(item_Code varchar(10))
 BEGIN
-  IF item_code = '%\%' THEN
+  IF item_Code = '%\%' THEN
   select * from Purchase;
   ELSE
   select * 
@@ -114,7 +114,7 @@ $$
 Delimiter $$
 CREATE PROCEDURE GetShipments (item_Code varchar(10))
 BEGIN
-  IF item_code = '%\%' THEN
+  IF item_Code = '%\%' THEN
   select * from Shipment;
   ELSE
   select * 
