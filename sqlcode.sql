@@ -97,9 +97,7 @@ BEGIN
   select * from Purchases;
   END
   ELSE
-  select * 
-  from Item
-  Where Item.ItemCode like item_Code;
+  select * from Item Where Item.ItemCode = item_Code;
   END IF;
 END;
 $$
@@ -112,7 +110,7 @@ BEGIN
   ELSE
   select * 
   from Purchase
-  where (select ItemCode from Item where Item.ID = Purchase.ItemID) like item_Code;
+  where (select ItemCode from Item where Item.ID = Purchase.ItemID) = item_Code;
   END IF;
 END;
 $$
@@ -125,7 +123,7 @@ BEGIN
   ELSE
   select * 
   from Shipment
-  where (select ItemCode from Item where Item.ID = Shipment.ItemID) like item_Code;
+  where (select ItemCode from Item where Item.ID = Shipment.ItemID) = item_Code;
   END IF;
 END;
 $$
