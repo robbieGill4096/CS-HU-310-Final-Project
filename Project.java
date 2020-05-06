@@ -44,7 +44,7 @@ public class Project {
 						cstmt = conn.prepareCall("{call CreateItem(?, ?, ?)}" );
 						cstmt.setString(1,args[1]);
 						cstmt.setString(2,args[2]);
-						cstmt.setInt(3, Integer.parseInt(args[3]));
+						cstmt.setDouble(3, Double.parseDouble(args[3]));
 						cstmt.executeUpdate();
 					} else {
 						cstmt = conn.prepareCall("{call CreateItem(?, ?)}" );
@@ -61,7 +61,7 @@ public class Project {
 				} else {
 					cstmt = conn.prepareCall("{call CreatePurchase(?, ?)}" );
 					cstmt.setString(1,args[1]);
-					cstmt.setInt(2,Integer.parseInt(args[2]));
+					cstmt.setDouble(2,Double.parseDouble(args[2]));
 					cstmt.executeUpdate();
 				}
 			}
@@ -72,7 +72,7 @@ public class Project {
 				} else {
 					cstmt = conn.prepareCall("{call CreateShipment(?, ?, ?)}" );
 					cstmt.setString(1,args[1]);
-					cstmt.setInt(2,Integer.parseInt(args[2]));
+					cstmt.setDouble(2,Double.parseDouble(args[2]));
 					cstmt.setDate(3, java.sql.Date.valueOf(args[3]));
 					cstmt.executeUpdate();
 				}
@@ -124,7 +124,7 @@ public class Project {
 				} else {
 					cstmt = conn.prepareCall("{call UpdateItem(?,?)}" );
 					cstmt.setString(1, args[1]);
-					cstmt.setInt(2, Integer.parseInt(args[2]));
+					cstmt.setDouble(2, Double.parseDouble(args[2]));
 					cstmt.executeUpdate();
 				}
 			}
