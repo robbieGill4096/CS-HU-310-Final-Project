@@ -87,37 +87,72 @@ END;
 Delimiter $$
 CREATE PROCEDURE GetItems(item_Code varchar(10))
 BEGIN
-select * 
-from Item
-where  Item.ItemCode like item_Code;
+  IF item_code = '%'
+  BEGIN
+  select * from Purchases;
+  END
+  ELSE
+  BEGIN
+  set @ID = (select ID from Item where Item.ItemCode = item_Code);
+  select * 
+  from Item i
+  where @ID = i.ItemID;
+  END
 END;
 
 Delimiter $$
 CREATE PROCEDURE GetPurchases(item_Code varchar(10))
 BEGIN
-select * 
-from Purchase
-where (select ItemCode from Item where Item.ID = Purchase.ItemID) like item_Code;
+  IF item_code = '%'
+  BEGIN
+  select * from Purchases;
+  END
+  ELSE
+  BEGIN
+  set @ID = (select ID from Item where Item.ItemCode = item_Code);
+  select * 
+  from Purchases p
+  where @ID = p.ItemID;
+  END
 END;
 
 Delimiter $$
 CREATE PROCEDURE GetShipments (item_Code varchar(10))
 BEGIN
-select * 
-from Shipment
-where (select ItemCode from Item where Item.ID = Shipment.ItemID) like item_Code;
+  IF item_code = '%'
+  BEGIN
+  select * from Shipment;
+  END
+  ELSE
+  BEGIN
+  set @ID = (select ID from Item where Item.ItemCode = item_Code);
+  select * 
+  from Shipment s
+  where @ID = s.ItemID;
+  END
 END;
 $$
 
 Delimiter $$
 CREATE PROCEDURE ItemsAvailable(item_Code varchar(10))
 BEGIN
-SELECT i.ItemCode, i.ItemDescription, (sum(ItemShip.Quantity) - sum(ItemPurch.Quantity)) as totalQuantity
-FROM Item i
-LEFT JOIN Purchase ItemPurch ON i.ID = ItemPurch.ItemID  
-LEFT JOIN Shipment as ItemShip ON i.ID = ItemShip.ItemID 
-where i.ItemCode like item_Code
-group by i.ItemCode;
+  IF item_Code = '%'
+  BEGIN
+  SELECT i.ItemCode, i.ItemDescription, (sum(ItemShip.Quantity) - sum(ItemPurch.Quantity)) as totalQuantity
+  FROM Item i
+  LEFT JOIN Purchase ItemPurch ON i.ID = ItemPurch.ItemID  
+  LEFT JOIN Shipment as ItemShip ON i.ID = ItemShip.ItemID
+  group by i.ItemCode;
+  END
+  ELSE
+  BEGIN
+  SELECT i.ItemCode, i.ItemDescription, (sum(ItemShip.Quantity) - sum(ItemPurch.Quantity)) as totalQuantity
+  FROM Item i
+  LEFT JOIN Purchase ItemPurch ON i.ID = ItemPurch.ItemID  
+  LEFT JOIN Shipment as ItemShip ON i.ID = ItemShip.ItemID 
+  where i.ItemCode like item_Code
+  group by i.ItemCode;
+  END
 END;
 
 Delimiter $$
@@ -128,5 +163,3 @@ SET Item.Price = item_price
 WHERE Item.ItemCode = item_Code;
 END;
 $$
-
-
