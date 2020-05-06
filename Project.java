@@ -102,7 +102,7 @@ public class Project {
 					System.out.println("invalid usage, Usage: java Project GetPurchases <itemCode>");
 					System.exit(1);
 				} else {
-					cstmt = conn.prepareCall("{call GetAllShipments(?)}" );
+					cstmt = conn.prepareCall("{call GetPurchases(?)}" );
 					cstmt.setString(1, args[1]);
 					resultSet = cstmt.executeQuery();
 				}
