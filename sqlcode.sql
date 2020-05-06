@@ -99,10 +99,9 @@ BEGIN
   END
   ELSE
   BEGIN
-  set @ID = (select ID from Item where Item.ItemCode = item_Code);
   select * 
-  from Item i
-  where @ID = i.ItemID;
+  from Item
+  Where Item.ItemCode like item_Code;
   END
 END;
 $$
@@ -113,10 +112,9 @@ BEGIN
   IF item_code = '%'
   select * from Purchases;
   ELSE
-  set @ID = (select ID from Item where Item.ItemCode = item_Code);
   select * 
-  from Purchases p
-  where @ID = p.ItemID;
+  from Purchase
+  where (select ItemCode from Item where Item.ID = Purchase.ItemID) like item_Code;
   END IF;
 END;
 $$
@@ -127,10 +125,9 @@ BEGIN
   IF item_code = '%'
   select * from Shipment;
   ELSE
-  set @ID = (select ID from Item where Item.ItemCode = item_Code);
   select * 
-  from Shipment s
-  where @ID = s.ItemID;
+  from Shipment
+  where (select ItemCode from Item where Item.ID = Shipment.ItemID) like item_Code;
   END IF;
 END;
 $$
