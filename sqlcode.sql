@@ -94,7 +94,7 @@ Delimiter $$
 CREATE PROCEDURE GetItems(item_Code varchar(10))
 BEGIN
   IF item_code = '%' THEN
-  select * from Purchases;
+  select * from Purchase;
   ELSE
   select * from Item Where ItemCode = item_Code;
   END IF;
@@ -105,7 +105,7 @@ Delimiter $$
 CREATE PROCEDURE GetPurchases(item_Code varchar(10))
 BEGIN
   IF item_code = '%' THEN
-  select * from Purchases;
+  select * from Purchase;
   ELSE
   select * 
   from Purchase
