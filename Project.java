@@ -1,179 +1,12 @@
-import java.io.*;
 import java.sql.*;
-import java.sql.Date;
-import java.text.DecimalFormat;
-import java.util.*;
 /*
 ((insert description here))
  */
-public class Project {
-	
-	private static Connection conn = null;
-	static DecimalFormat priceFormat = new DecimalFormat("#.00");
-	
-	private static void CreateItem(String itemCode, String itemDescription, String price) {		
-		PreparedStatement prepStatement = null;
-		
-		try {
-			prepStatement = conn.prepareStatement("Call CreateItem('" + itemCode + "', '" + itemDescription + "'," + price + ");");
-			prepStatement.executeUpdate();
-			System.out.println("Item " + itemCode + " created.\n");
+public class Project2 {
 
-		} catch (SQLException ex) {
-			//attempt to handle errors
-			System.err.println("SQLException: " + ex.getMessage());
-			System.err.println("SQLState: " + ex.getSQLState());
-			System.err.println("VendorError: " + ex.getErrorCode());
-		} finally {
-			if (prepStatement != null) {
-				try {
-					prepStatement.close();
-				} catch (SQLException sqlEx) {
-				} // ignore
-				prepStatement = null;
-			}
-		}
-	}
-	
-	private static void CreatePurchase(String itemCode, int purchaseQuantity) {
-		PreparedStatement prepStatement = null;
-
-		try {
-			prepStatement = conn.prepareStatement("Call CreatePurchase('" + itemCode + "', " + purchaseQuantity + ");");
-			
-			if(prepStatement.executeUpdate() >= 1) {
-				System.out.println("Purchase of " + purchaseQuantity + " " + itemCode + " created.\n");
-			} else {
-				System.out.println("Error: Cannot create purchase of " + itemCode + " because it does not exist in the list of items.");
-			}
-
-		} catch (SQLException ex) {
-			// handle possible errors
-			System.err.println("SQLException: " + ex.getMessage());
-			System.err.println("SQLState: " + ex.getSQLState());
-			System.err.println("VendorError: " + ex.getErrorCode());
-		} finally {
-			if (prepStatement != null) {
-				try {
-					prepStatement.close();
-				} catch (SQLException sqlEx) {
-				} // ignore case 
-				prepStatement = null;
-			}
-		}
-	}
-	private static void CreateShipment(String itemCode, int shipmentQuantity, Date shipmentDate) {
-		PreparedStatement prepStatement = null;
-
-		try {
-			prepStatement = conn.prepareStatement("Call CreateShipment('" + itemCode + "', " + shipmentQuantity + ", '" + shipmentDate + "');");
-			
-			if(prepStatement.executeUpdate() >= 1) {
-				System.out.println("Shipment of " + shipmentQuantity + " " + itemCode + " created.\n");
-			} else {
-				System.out.println("Error: Cannot create shipment of " + itemCode + " because it does not exist in the list of items.");
-			}
-
-		} catch (SQLException ex) {
-			// handle any errors
-			System.err.println("SQLException: " + ex.getMessage());
-			System.err.println("SQLState: " + ex.getSQLState());
-			System.err.println("VendorError: " + ex.getErrorCode());
-		} finally {
-			if (prepStatement != null) {
-				try {
-					prepStatement.close();
-				} catch (SQLException sqlEx) {
-				} // ignore
-				prepStatement = null;
-			}
-		}
-	}
-	
-	private static void GetShipments(String itemCode) {
-		Statement prepStatement = null;
-		ResultSet resSet = null;
-
-		try {
-			prepStatement = conn.createStatement();
-			resSet = prepStatement.executeQuery("Call GetShipments('" + itemCode + "');");
-			
-			System.out.println("ID:ItemID:Quantity:ShipmentDate\n");
-			
-			resSet.beforeFirst();
-			
-			while (resSet.next()) {
-				System.out.println(resSet.getInt(1) + ":" + resSet.getInt(2) + ":" + resSet.getInt(3) + ":" + resSet.getDate(4));
-			}
-
-		} catch (SQLException ex) {
-			// handle any errors
-			System.err.println("SQLException: " + ex.getMessage());
-			System.err.println("SQLState: " + ex.getSQLState());
-			System.err.println("VendorError: " + ex.getErrorCode());
-		} finally {
-			if (resSet != null) {
-				try {
-					resSet.close();
-				} catch (SQLException sqlEx) {
-				} // ignore
-				resSet = null;
-			}
-			if (prepStatement != null) {
-				try {
-					prepStatement.close();
-				} catch (SQLException sqlEx) {
-				} // ignore
-				prepStatement = null;
-			}
-		}
-	}
-	
-	private static void GetItems(String itemCode) {
-		Statement prepStatement = null;
-		ResultSet resSet = null;
-
-		try {
-			prepStatement = conn.createStatement();
-			resSet = prepStatement.executeQuery("Call GetItems('" + itemCode + "');");
-			
-			System.out.println("ID:ItemCode:ItemDescription:Price\n");
-			
-			resSet.beforeFirst();
-			
-			while (resSet.next()) {
-				System.out.println(resSet.getInt(1) + ":" + resSet.getString(2) + ":" + resSet.getString(3) + ":" + resSet.getDouble(4));
-			}
-		} catch (SQLException ex) {
-			// handle any errors
-			System.err.println("SQLException: " + ex.getMessage());
-			System.err.println("SQLState: " + ex.getSQLState());
-			System.err.println("VendorError: " + ex.getErrorCode());
-		} finally {
-			if (resSet != null) {
-				try {
-					resSet.close();
-				} catch (SQLException sqlEx) {
-				} // ignore
-				resSet = null;
-			}
-			if (prepStatement != null) {
-				try {
-					prepStatement.close();
-				} catch (SQLException sqlEx) {
-				} // ignore
-				prepStatement = null;
-			}
-		}
-	}
-	
-	
-	
-	
-	//----------------MAIN METHOD-----------------------------------------------------------------------------------
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
 		Connection conn = null;
-		Statement stmt = null;
+		CallableStatement cstmt = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:52116/CS310?verifyServerCertificate=false&useSSL=true&serverTimezone=UTC", "msandbox",
@@ -181,159 +14,178 @@ public class Project {
 			// Do something with the Connection
 			System.out.println("Database [test db] connection succeeded!");
 			System.out.println();
-			ResultSet resultSet;
+			ResultSet resultSet = null;
 			conn.setAutoCommit(false);//transaction block starts
-			stmt = conn.createStatement();
 			//Parse
 			if (args[0].equals("/?")) {
 				if(args.length != 1) {
 					System.out.println("invalid usage, Usage:  java Project /?");
 					System.exit(1);
 				} else {
-					//Insert SQL code here
+					System.out.println("java Project CreateItem <itemCode> <itemDescription> <price>");
+					System.out.println("java Project CreatePurchase <itemCode> <PurchaseQuantity>");
+					System.out.println("java Project CreateShipment <itemCode> <ShipmentQuantity> <shipmentDate>");
+					System.out.println("java Project GetItems <itemCode>");
+					System.out.println("java Project GetShipments <itemCode>");
+					System.out.println("java Project GetPurchases <itemCode>");
+					System.out.println("java Project ItemsAvailable <itemCode>");
+					System.out.println("java Project UpdateItem <itemCode> <price>");
+					System.out.println("java Project DeleteItem <itemCode>");
+					System.out.println("java Project DeleteShipment <itemCode>");
+					System.out.println("java Project DeletePurchase <itemCode>");
 				}
 			}
 			else if (args[0].equals("CreateItem")) {
-				if(args.length != 4) {
+				if(args.length < 3) {
 					System.out.println("invalid usage, Usage: java Project CreateItem <itemCode> <itemDescription> <price>");
 					System.exit(1);
 				} else {
-					String itemCode = args[1];
-					String itemDescription = args[2];
-					Double price = Double.valueOf(args[3]);
-					String priceString = priceFormat.format(price);
-					
-					CreateItem( itemCode, itemDescription, priceString);
-					
+					if (args.length == 4) {
+						cstmt = conn.prepareCall("{call CreateItem(?, ?, ?)}" );
+						cstmt.setString(1,args[1]);
+						cstmt.setString(2,args[2]);
+						cstmt.setInt(3, Integer.parseInt(args[3]));
+						cstmt.executeUpdate();
+					} else {
+						cstmt = conn.prepareCall("{call CreateItem(?, ?)}" );
+						cstmt.setString(1,args[1]);
+						cstmt.setString(2,args[2]);
+						cstmt.executeUpdate();
+					}
 				}
 			}
 			else if (args[0].equals("CreatePurchase")) {
 				if(args.length != 3) {
 					System.out.println("invalid usage, Usage: java Project CreatePurchase <itemCode> <PurchaseQuantity>");
 					System.exit(1);
-				} else if(args.length == 3 && (Integer.valueOf(args[2]) > 0))  {
-					//Insert SQL code here
-					String itemCode = args[1];
-					int purchaseQuantity = Integer.valueOf(args[2]);
-					
-					CreatePurchase(itemCode, purchaseQuantity);
-				}
-				else {
-					System.out.println("please specify an item code and purchase quantity");
-					System.exit(1);
+				} else {
+					cstmt = conn.prepareCall("{call CreatePurchase(?, ?)}" );
+					cstmt.setString(1,args[1]);
+					cstmt.setInt(2,Integer.parseInt(args[2]));
+					cstmt.executeUpdate();
 				}
 			}
 			else if (args[0].equals("CreateShipment")) {
 				if(args.length != 4) {
-					System.out.println("java Project CreateShipment <itemCode> <ShipmentQuantity> <shipmentDate>");
+					System.out.println("invalid usage, Usage: java Project CreateShipment <itemCode> <ShipmentQuantity> <shipmentDate>");
 					System.exit(1);
 				} else {
-					//Insert SQL code here
-					String itemCode = args[1];
-					int shipmentQuantity = Integer.valueOf(args[2]);
-					Date shipmentDate = Date.valueOf(args[3]);
-					
-					CreateShipment(itemCode, shipmentQuantity, shipmentDate);
+					cstmt = conn.prepareCall("{call CreateShipment(?, ?, ?)}" );
+					cstmt.setString(1,args[1]);
+					cstmt.setInt(2,Integer.parseInt(args[2]));
+					cstmt.setDate(3, java.sql.Date.valueOf(args[3]));
+					cstmt.executeUpdate();
 				}
 			}
 			else if (args[0].equals("GetItems")) {
 				if(args.length != 2) {
-					System.out.println("java Project GetItems <itemCode>");
+					System.out.println("invalid usage, Usage: java Project GetItems <itemCode>");
 					System.exit(1);
 				} else {
-						String itemCode = args[1];
-						GetItems(itemCode);
-						
-					
+					cstmt = conn.prepareCall("{call GetItems(?)}" );
+					cstmt.setString(1, args[1]);
+					resultSet = cstmt.executeQuery();
 				}
 			}
 			else if (args[0].equals("GetShipments")) {
 				if(args.length != 2) {
-					System.out.println("java Project GetShipments <itemCode>");
+					System.out.println("invalid usage, Usage: java Project GetShipments <itemCode>");
 					System.exit(1);
 				} else {
-					String itemCode = args[1];
-					GetShipments(itemCode);
-					
+					cstmt = conn.prepareCall("{call GetShipments(?)}" );
+					cstmt.setString(1, args[1]);
+					resultSet = cstmt.executeQuery();
 				}
 			}
 			else if (args[0].equals("GetPurchases")) {
 				if(args.length != 2) {
-					System.out.println("java Project GetPurchases <itemCode>");
+					System.out.println("invalid usage, Usage: java Project GetPurchases <itemCode>");
 					System.exit(1);
 				} else {
-					if (args[1].equals("%")) {
-						resultSet = stmt.executeQuery("SELECT * FROM Purchase ORDER BY ItemID ASC;");
-					} else {
-						resultSet = stmt.executeQuery("SELECT * FROM Purchase where ItemID = "+args[1]+";");
-					}
-					System.out.println(resultSet);
+					cstmt = conn.prepareCall("{call GetAllShipments(?)}" );
+					cstmt.setString(1, args[1]);
+					resultSet = cstmt.executeQuery();
 				}
 			}
 			else if (args[0].equals("ItemsAvailable")) {
 				if(args.length != 2) {
-					System.out.println("java Project ItemsAvailable <itemCode>");
+					System.out.println("invalid usage, Usage: java Project ItemsAvailable <itemCode>");
 					System.exit(1);
 				} else {
-					if (args[1].equals("%")) {
-						stmt.executeQuery("Select i.ItemCode, i.ItemDescription, SUM(s.Quantity - p.Quantity) as AvailableItems"
-								+ " From Item i, p Purchase, s Shipment ORDER BY i.ItemCode;");
-					} else {
-						//Still working on this
-						stmt.executeQuery("Select i.ItemCode, i.ItemDescription, SUM(s.Quantity - p.Quantity) as AvailableItems"
-							+ " From Item i, p Purchase, s Shipment where ItemCode = "+args[1]+";");
-					}
+					cstmt = conn.prepareCall("{call ItemsAvailable(?)}");
+					cstmt.setString(1, args[1]);
+					resultSet = cstmt.executeQuery();
 				}
 			}
 			else if (args[0].equals("UpdateItem")) {
 				if(args.length != 3) {
-					System.out.println("java Project UpdateItem <itemCode> <price>");
+					System.out.println("invalid usage, Usage: java Project UpdateItem <itemCode> <price>");
 					System.exit(1);
 				} else {
-					stmt.executeUpdate( "Update Item set Price = "+args[2]+" where ItemCode = "+args[1]+";");
+					cstmt = conn.prepareCall("{call UpdateItem(?,?)}" );
+					cstmt.setString(1, args[1]);
+					cstmt.setInt(2, Integer.parseInt(args[2]));
+					cstmt.executeUpdate();
 				}
 			}
 			else if (args[0].equals("DeleteItem")) {
 				if(args.length != 2) {
-					System.out.println("java Project DeleteItem <itemCode>");
+					System.out.println("invalid usage, Usage: java Project DeleteItem <itemCode>");
 					System.exit(1);
 				} else {
-					stmt.executeUpdate("Delete From Item where ItemCode = "+args[1]+";");
+					cstmt = conn.prepareCall("{call DeleteItem(?)}" );
+					cstmt.setString(1, args[1]);
+					cstmt.executeUpdate();
 				}
 			}
 			else if (args[0].equals("DeleteShipment")) {
 				if(args.length != 2) {
-					System.out.println("java Project DeleteShipment <itemCode>");
+					System.out.println("invalid usage, Usage: java Project DeleteShipment <itemCode>");
 					System.exit(1);
 				} else {
-					stmt.executeUpdate("set @itemID = (Select ID from Item where itemCode = "+args[1]+"); "
-							+ "Delete From Shipment where ItemID = @itemID limit 1;");
+					cstmt = conn.prepareCall("{call DeleteShipment(?)}" );
+					cstmt.setString(1, args[1]);
+					cstmt.executeUpdate();
 				}
 			}
 			else if (args[0].equals("DeletePurchase")) {
 				if(args.length != 2) {
-					System.out.println("java Project DeletePurchase <itemCode>");
+					System.out.println("invalid usage, Usage: java Project DeletePurchase <itemCode>");
 					System.exit(1);
 				} else {
-					stmt.executeUpdate("set @itemID = (Select ID from Item where itemCode = "+args[1]+");"
-							+ "Delete From Purchase where ItemID = @itemID limit 1;");
+					cstmt = conn.prepareCall("{call DeletePurchase(?)}" );
+					cstmt.setString(1, args[1]);
+					cstmt.executeUpdate();
 				}
 			} else {
 				System.out.println("No arguments used, input: java Project /? for all usage commands");
 			}
+
+			if (resultSet != null) {
+				ResultSetMetaData rsmd = resultSet.getMetaData();
+				int columnsNumber = rsmd.getColumnCount();
+				while (resultSet.next()) {
+					for (int i = 1; i <= columnsNumber; i++) {
+						if (i > 1) System.out.print(",  ");
+						String columnValue = resultSet.getString(i);
+						System.out.print(columnValue + " " + rsmd.getColumnName(i));
+					}
+					System.out.println(" ");
+				}
+			}
+
+
 		} catch (SQLException ex) {
 			// handle any errors
 			System.err.println("SQLException: " + ex.getMessage());
 			System.err.println("SQLState: " + ex.getSQLState());
 			System.err.println("VendorError: " + ex.getErrorCode());
 		} finally {
-		if (stmt != null) {
-			stmt.close();
-		}
-		conn.setAutoCommit(true); // restore dafault mode
-		conn.close();
+			if (cstmt != null) {
+				cstmt.close();
+			}
+			conn.setAutoCommit(true); // restore dafault mode
+			conn.close();
 		}
 	}
-
-	
 }
